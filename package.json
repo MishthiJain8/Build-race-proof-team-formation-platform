@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"node --watch start.mjs\" \"vite --host 0.0.0.0\"",
-    "build": "vite build",
+    "build": "vite build && rm -rf public && cp -R dist public",
     "start": "node start.mjs",
     "test": "node --test --test-concurrency=1 tests/api.test.mjs",
     "seed": "node scripts/seed.mjs",

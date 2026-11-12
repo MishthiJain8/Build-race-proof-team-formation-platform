@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "production" && (!process.env.JWT_SECRET || process
 }
 export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL || "postgresql://teamforge:teamforge_dev@localhost:5432/teamforge",
-  max: 40
+  max: process.env.VERCEL ? 4 : 40
 });
 export const app = express();
 app.disable("x-powered-by");
@@ -380,7 +380,7 @@ app.get("/api/teams/:id/audit",auth,wrap(async(req,res)=>{
 
 const root=dirname(fileURLToPath(import.meta.url));
 const dist=join(root,"dist");
-if(existsSync(dist)){
+if(existsSync(dist) && !process.env.VERCEL){
   app.use(express.static(dist));
   app.get("*",(req,res,next)=>{
     if(req.path.startsWith("/api/")) return next();
@@ -397,3 +397,5 @@ app.use((err,req,res,next)=>{
       :status>=500?"Internal server error":err.message
   });
 });
+
+export default app;

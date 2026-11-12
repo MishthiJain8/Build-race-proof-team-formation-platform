@@ -47,10 +47,10 @@ function App(){
 
   useEffect(()=>{
     refresh();
-    const events=new EventSource("/api/events");
-    events.onmessage=()=>refresh();
-    const timer=setInterval(refresh,12000);
-    return()=>{events.close();clearInterval(timer);};
+    const events=import.meta.env.PROD ? null : new EventSource("/api/events");
+    if(events) events.onmessage=()=>refresh();
+    const timer=setInterval(refresh,import.meta.env.PROD ? 8000 : 12000);
+    return()=>{events?.close();clearInterval(timer);};
   },[refresh]);
 
   async function run(action){
