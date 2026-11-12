@@ -388,6 +388,12 @@ if(existsSync(dist) && !process.env.VERCEL){
   });
 }
 
+
+// TEAMFORGE_HOME_ROUTE
+app.get("/", (req, res) => {
+  return res.redirect(302, "/index.html");
+});
+
 app.use((err,req,res,next)=>{
   const status=err.status || (err instanceof z.ZodError?400:err.code==="23505"?409:500);
   if(status>=500) console.error("API error",err);
